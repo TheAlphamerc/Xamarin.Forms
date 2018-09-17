@@ -60,10 +60,14 @@
 
 		public static readonly BindableProperty UseSafeAreaProperty = BindableProperty.Create("UseSafeArea", typeof(bool), typeof(Page), false, propertyChanged: (bindable, oldValue, newValue) =>
 		{
+			if (Device.RuntimePlatform != Device.iOS) return;
+
 			var page = bindable as Xamarin.Forms.Page;
 			if ((bool)oldValue && !(bool)newValue)
 			{
-				page.Padding = default(Thickness);
+				var safeAreaInsets = GetSafeAreaInsets(page);
+				if (safeAreaInsets == page.Padding)
+					page.Padding = default(Thickness);
 			}
 			else
 			{
