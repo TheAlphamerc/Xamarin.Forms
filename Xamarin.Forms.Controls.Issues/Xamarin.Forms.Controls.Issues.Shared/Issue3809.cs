@@ -36,13 +36,13 @@ namespace Xamarin.Forms.Controls.Issues
 			Button button = null;
 			button = new Button()
 			{
-				Text = $"{_safeAreaText} true",
+				Text = $"{_safeAreaText}{true}",
 				AutomationId = _safeAreaAutomationId,
 				Command = new Command(() =>
 				{
 					bool safeArea = !Detail.On<Xamarin.Forms.PlatformConfiguration.iOS>().UsingSafeArea();
 					Detail.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUseSafeArea(safeArea);
-					button.Text = $"{_safeAreaText} {safeArea}";
+					button.Text = $"{_safeAreaText}{safeArea}";
 					Device.BeginInvokeOnMainThread(() =>
 					{
 						label.Text = $"{Detail.Padding.Left}, {Detail.Padding.Top}, {Detail.Padding.Right}, {Detail.Padding.Bottom}";
@@ -90,6 +90,7 @@ namespace Xamarin.Forms.Controls.Issues
 		public void SafeAreaInsetsBreaksAndroidPadding()
 		{
 			// ensure initial paddings are honored
+			RunningApp.WaitForElement($"{_safeAreaText}{true}");
 			var element = RunningApp.WaitForElement(_paddingLabel).First();
 			Assert.AreNotEqual(element.Text, "0, 0, 0, 0");
 #if !__IOS__
@@ -98,6 +99,7 @@ namespace Xamarin.Forms.Controls.Issues
 
 			// disable Safe Area Insets
 			RunningApp.Tap(_safeAreaAutomationId);
+			RunningApp.WaitForElement($"{_safeAreaText}{false}");
 			element = RunningApp.WaitForElement(_paddingLabel).First();
 
 #if __IOS__
@@ -108,6 +110,7 @@ namespace Xamarin.Forms.Controls.Issues
 
 			// enable Safe Area insets
 			RunningApp.Tap(_safeAreaAutomationId);
+			RunningApp.WaitForElement($"{_safeAreaText}{true}");
 			element = RunningApp.WaitForElement(_paddingLabel).First();
 			Assert.AreNotEqual(element.Text, "0, 0, 0, 0");
 #if !__IOS__
@@ -118,6 +121,7 @@ namespace Xamarin.Forms.Controls.Issues
 			// Set Padding and then disable safe area insets
 			RunningApp.Tap(_setPagePadding);
 			RunningApp.Tap(_safeAreaAutomationId);
+			RunningApp.WaitForElement($"{_safeAreaText}{false}");
 			element = RunningApp.WaitForElement(_paddingLabel).First();
 			Assert.AreEqual(element.Text, "25, 25, 25, 25");
 
