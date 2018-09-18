@@ -14,9 +14,6 @@ namespace Xamarin.Forms.Controls.Issues
 {
 	[Preserve(AllMembers = true)]
 	[Issue(IssueTracker.Github, 3809, "SetUseSafeArea is wiping out Page Padding ")]
-#if UITEST
-	[NUnit.Framework.Category(UITestCategories.ListView)]
-#endif
 	public class Issue3809 : TestMasterDetailPage
 	{
 		const string _setPagePadding = "Set Page Padding";
